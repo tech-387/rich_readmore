@@ -215,67 +215,14 @@ class ReadMoreTextState extends State<ReadMoreText> {
           linkLongerThanLine = true;
         }
 
-        var textSpan;
-        switch (widget.trimMode) {
-          case TrimMode.Length:
-            if (widget.trimLength < widget.data.length) {
-              textSpan = _buildData(
-                data: _readMore
-                    ? widget.data.substring(0, widget.trimLength)
-                    : widget.data,
-                textStyle: effectiveTextStyle,
-                linkTextStyle: effectiveTextStyle?.copyWith(
-                  decoration: TextDecoration.underline,
-                  color: Colors.blue,
-                ),
-                onPressed: widget.onLinkPressed,
-                children: [_delimiter, link],
-              );
-            } else {
-              textSpan = _buildData(
-                data: widget.data,
-                textStyle: effectiveTextStyle,
-                linkTextStyle: effectiveTextStyle?.copyWith(
-                  decoration: TextDecoration.underline,
-                  color: Colors.blue,
-                ),
-                onPressed: widget.onLinkPressed,
-                children: [],
-              );
-            }
-            break;
-          case TrimMode.Line:
-            if (textPainter.didExceedMaxLines) {
-              textSpan = _buildData(
-                data: _readMore
-                    ? widget.data.substring(0, endIndex) +
-                        (linkLongerThanLine ? _kLineSeparator : '')
-                    : widget.data,
-                textStyle: effectiveTextStyle,
-                linkTextStyle: effectiveTextStyle?.copyWith(
-                  decoration: TextDecoration.underline,
-                  color: Colors.blue,
-                ),
-                onPressed: widget.onLinkPressed,
-                children: [_delimiter, link],
-              );
-            } else {
-              textSpan = _buildData(
-                data: widget.data,
-                textStyle: effectiveTextStyle,
-                linkTextStyle: effectiveTextStyle?.copyWith(
-                  decoration: TextDecoration.underline,
-                  color: Colors.blue,
-                ),
-                onPressed: widget.onLinkPressed,
-                children: [],
-              );
-            }
-            break;
-          default:
-            throw Exception(
-                'TrimMode type: ${widget.trimMode} is not supported');
-        }
+        var textSpan = _getTextSpanForTrimMode(
+            trimMode: widget.trimMode,
+            effectiveTextStyle: effectiveTextStyle,
+            delimiter: _delimiter,
+            link: link,
+            textPainter: textPainter,
+            endIndex: endIndex,
+            linkLongerThanLine: linkLongerThanLine);
 
         return Text.rich(
           TextSpan(
@@ -303,6 +250,73 @@ class ReadMoreTextState extends State<ReadMoreText> {
       );
     }
     return result;
+  }
+
+  TextSpan _getTextSpanForTrimMode(
+      {required TrimMode trimMode,
+      TextStyle? effectiveTextStyle,
+      required TextSpan delimiter,
+      required TextSpan link,
+      required TextPainter textPainter,
+      required int endIndex,
+      required bool linkLongerThanLine}) {
+    switch (widget.trimMode) {
+      case TrimMode.Length:
+        if (widget.trimLength < widget.data.length) {
+          return _buildData(
+            data: _readMore
+                ? widget.data.substring(0, widget.trimLength)
+                : widget.data,
+            textStyle: effectiveTextStyle,
+            linkTextStyle: effectiveTextStyle?.copyWith(
+              decoration: TextDecoration.underline,
+              color: Colors.blue,
+            ),
+            onPressed: widget.onLinkPressed,
+            children: [delimiter, link],
+          );
+        } else {
+          return _buildData(
+            data: widget.data,
+            textStyle: effectiveTextStyle,
+            linkTextStyle: effectiveTextStyle?.copyWith(
+              decoration: TextDecoration.underline,
+              color: Colors.blue,
+            ),
+            onPressed: widget.onLinkPressed,
+            children: [],
+          );
+        }
+      case TrimMode.Line:
+        if (textPainter.didExceedMaxLines) {
+          return _buildData(
+            data: _readMore
+                ? widget.data.substring(0, endIndex) +
+                    (linkLongerThanLine ? _kLineSeparator : '')
+                : widget.data,
+            textStyle: effectiveTextStyle,
+            linkTextStyle: effectiveTextStyle?.copyWith(
+              decoration: TextDecoration.underline,
+              color: Colors.blue,
+            ),
+            onPressed: widget.onLinkPressed,
+            children: [delimiter, link],
+          );
+        } else {
+          return _buildData(
+            data: widget.data,
+            textStyle: effectiveTextStyle,
+            linkTextStyle: effectiveTextStyle?.copyWith(
+              decoration: TextDecoration.underline,
+              color: Colors.blue,
+            ),
+            onPressed: widget.onLinkPressed,
+            children: [],
+          );
+        }
+      default:
+        throw Exception('TrimMode type: ${widget.trimMode} is not supported');
+    }
   }
 
   TextSpan _buildData({
