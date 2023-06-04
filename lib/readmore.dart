@@ -86,26 +86,24 @@ class ReadMoreTextState extends State<ReadMoreText> {
 
   @override
   Widget build(BuildContext context) {
-    final DefaultTextStyle defaultTextStyle = DefaultTextStyle.of(context);
-    TextStyle? effectiveTextStyle = widget.style;
-    if (widget.style?.inherit ?? false) {
-      effectiveTextStyle = defaultTextStyle.style.merge(widget.style);
-    }
+    // final DefaultTextStyle defaultTextStyle = DefaultTextStyle.of(context);
+    // TextStyle? effectiveTextStyle = widget.style;
+    // if (widget.style?.inherit ?? false) {
+    //   effectiveTextStyle = defaultTextStyle.style.merge(widget.style);
+    // }
 
-    final textAlign =
-        widget.textAlign ?? defaultTextStyle.textAlign ?? TextAlign.start;
+    final textAlign = widget.textAlign ?? TextAlign.start;
+    // widget.textAlign ?? defaultTextStyle.textAlign ?? TextAlign.start;
     final textDirection = widget.textDirection ?? Directionality.of(context);
     final textScaleFactor =
         widget.textScaleFactor ?? MediaQuery.textScaleFactorOf(context);
     // final overflow = defaultTextStyle.overflow;
     final locale = widget.locale ?? Localizations.maybeLocaleOf(context);
 
-    final colorClickableText =
-        widget.colorClickableText ?? Theme.of(context).colorScheme.secondary;
-    final _defaultLessStyle = widget.lessStyle ??
-        effectiveTextStyle?.copyWith(color: colorClickableText);
-    final _defaultMoreStyle = widget.moreStyle ??
-        effectiveTextStyle?.copyWith(color: colorClickableText);
+    // final colorClickableText =
+    //     widget.colorClickableText ?? Theme.of(context).colorScheme.secondary;
+    final _defaultLessStyle = widget.lessStyle;
+    final _defaultMoreStyle = widget.moreStyle;
 
     /// The string for say if the actions is expand or collapse
     TextSpan actionText = TextSpan(
@@ -165,7 +163,7 @@ class ReadMoreTextState extends State<ReadMoreText> {
 
         var textSpan = _getTextSpanForTrimMode(
             trimMode: widget.trimMode,
-            effectiveTextStyle: effectiveTextStyle,
+            // effectiveTextStyle: effectiveTextStyle,
             actionText: actionText,
             textPainter: textPainter,
             endIndex: endIndex,
@@ -202,7 +200,7 @@ class ReadMoreTextState extends State<ReadMoreText> {
 
   TextSpan _getTextSpanForTrimMode(
       {required TrimMode trimMode,
-      TextStyle? effectiveTextStyle,
+      // TextStyle? effectiveTextStyle,
       required TextSpan actionText,
       required TextPainter textPainter,
       required int endIndex,
@@ -245,9 +243,11 @@ class ReadMoreTextState extends State<ReadMoreText> {
           //   // children: [delimiter, link],
           // );
 
-          return widget.data.substring(0, endIndex);
+          final textSpan =
+              _readMore ? widget.data.substring(0, endIndex) : widget.data;
+          return TextSpan(children: [textSpan, actionText]);
         } else {
-          return widget.data;
+          return TextSpan(children: [widget.data, actionText]);
         }
       default:
         throw Exception('TrimMode type: ${widget.trimMode} is not supported');
@@ -256,6 +256,15 @@ class ReadMoreTextState extends State<ReadMoreText> {
 }
 
 extension TextSpanExtension on TextSpan {
+  TextSpan copyWith(
+      {String? text, TextStyle? style, List<TextSpan>? children}) {
+    return TextSpan(
+      text: text ?? this.text,
+      style: style ?? this.style,
+      children: children ?? this.children,
+    );
+  }
+
   TextSpan substring(int start, int end) {
     final substringSpan = <TextSpan>[];
     int lengthCount = 0;

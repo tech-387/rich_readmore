@@ -30,11 +30,12 @@ class DemoApp extends StatelessWidget {
       children: <TextSpan>[
         TextSpan(
           text: 'em Ipsum is not simply random text. ',
-          style: TextStyle(color: Colors.red),
+          style: TextStyle(color: Colors.red, fontSize: 18),
         ),
         TextSpan(
             text:
-                'It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old'),
+                'It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old',
+            style: TextStyle(fontSize: 24)),
         TextSpan(
             text: ' Sign up',
             style: TextStyle(color: Colors.blueAccent, fontSize: 18),
