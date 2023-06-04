@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:readmore/data/models/settings.dart';
 import 'package:readmore/readmore.dart';
 
 void main() {
@@ -94,11 +95,10 @@ class DemoApp extends StatelessWidget {
                 padding: const EdgeInsets.all(16.0),
                 child: ReadMoreText(
                   textSpan,
-                  trimLines: 3,
+                  settings: LineModeSettings(trimLines: 3),
                   style: TextStyle(color: Colors.black),
                   colorClickableText: Colors.pink,
-                  trimMode: TrimMode.Line,
-                  trimCollapsedText: '...Expand',
+                  trimCollapsedText: 'Expand',
                   trimExpandedText: ' Collapse ',
                   onLinkPressed: (url) {
                     print(url);

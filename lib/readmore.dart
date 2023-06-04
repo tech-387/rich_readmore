@@ -1,25 +1,19 @@
 library readmore;
 
-import 'dart:math';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-
-enum TrimMode {
-  Length,
-  Line,
-}
+import 'package:readmore/core/extensions/text_span_extensions.dart';
+import 'package:readmore/data/models/settings.dart';
+import 'package:readmore/data/models/trim_modes.dart';
 
 class ReadMoreText extends StatefulWidget {
   const ReadMoreText(
     this.data, {
     Key? key,
+    required this.settings,
     this.trimExpandedText = 'show less',
     this.trimCollapsedText = 'read more',
     this.colorClickableText,
-    this.trimLength = 240,
-    this.trimLines = 2,
-    this.trimMode = TrimMode.Length,
     this.style,
     this.textAlign,
     this.textDirection,
@@ -33,16 +27,10 @@ class ReadMoreText extends StatefulWidget {
     this.linkTextStyle,
   }) : super(key: key);
 
-  /// Used on TrimMode.Length
-  final int trimLength;
-
-  /// Used on TrimMode.Lines
-  final int trimLines;
-
-  /// Determines the type of trim. TrimMode.Length takes into account
-  /// the number of letters, while TrimMode.Lines takes into account
-  /// the number of lines
-  final TrimMode trimMode;
+  /// Can accept two different types of objects, [LineModeSettings] or [LengthModeSettings]
+  /// * Use [LineModeSettings] for trimming with a specific line number
+  /// * Use [LengthModeSettings] for trimming with a specific character length
+  final ReadMoreSettings settings;
 
   /// TextStyle for expanded text
   final TextStyle? moreStyle;
@@ -72,8 +60,6 @@ class ReadMoreText extends StatefulWidget {
   ReadMoreTextState createState() => ReadMoreTextState();
 }
 
-const String _kLineSeparator = '\u2028';
-
 class ReadMoreTextState extends State<ReadMoreText> {
   bool _readMore = true;
 
@@ -86,22 +72,12 @@ class ReadMoreTextState extends State<ReadMoreText> {
 
   @override
   Widget build(BuildContext context) {
-    // final DefaultTextStyle defaultTextStyle = DefaultTextStyle.of(context);
-    // TextStyle? effectiveTextStyle = widget.style;
-    // if (widget.style?.inherit ?? false) {
-    //   effectiveTextStyle = defaultTextStyle.style.merge(widget.style);
-    // }
-
     final textAlign = widget.textAlign ?? TextAlign.start;
-    // widget.textAlign ?? defaultTextStyle.textAlign ?? TextAlign.start;
     final textDirection = widget.textDirection ?? Directionality.of(context);
     final textScaleFactor =
         widget.textScaleFactor ?? MediaQuery.textScaleFactorOf(context);
-    // final overflow = defaultTextStyle.overflow;
     final locale = widget.locale ?? Localizations.maybeLocaleOf(context);
 
-    // final colorClickableText =
-    //     widget.colorClickableText ?? Theme.of(context).colorScheme.secondary;
     final _defaultLessStyle = widget.lessStyle;
     final _defaultMoreStyle = widget.moreStyle;
 
@@ -123,17 +99,13 @@ class ReadMoreTextState extends State<ReadMoreText> {
           textAlign: textAlign,
           textDirection: textDirection,
           textScaleFactor: textScaleFactor,
-          maxLines: widget.trimLines,
-          // ellipsis: overflow == TextOverflow.ellipsis ? widget.delimiter : null,
+          maxLines: widget.settings is LineModeSettings
+              ? (widget.settings as LineModeSettings).trimLines
+              : null,
           locale: locale,
         );
         textPainter.layout(minWidth: 0, maxWidth: maxWidth);
         final actionTextSize = textPainter.size;
-
-        // //! Layout and measure delimiter
-        // textPainter.text = _delimiter;
-        // textPainter.layout(minWidth: 0, maxWidth: maxWidth);
-        // final delimiterSize = textPainter.size;
 
         // Layout and measure text
         textPainter.text = widget.data;
@@ -162,7 +134,7 @@ class ReadMoreTextState extends State<ReadMoreText> {
         }
 
         var textSpan = _getTextSpanForTrimMode(
-            trimMode: widget.trimMode,
+            trimMode: widget.settings.trimMode,
             // effectiveTextStyle: effectiveTextStyle,
             actionText: actionText,
             textPainter: textPainter,
@@ -205,8 +177,8 @@ class ReadMoreTextState extends State<ReadMoreText> {
       required TextPainter textPainter,
       required int endIndex,
       required bool actionTextLongerThanLine}) {
-    switch (widget.trimMode) {
-      case TrimMode.Length:
+    switch (widget.settings.trimMode) {
+      case TrimMode.length:
       // if (widget.trimLength < widget.data.length) {
       //   return _buildData(
       //     data: _readMore
@@ -232,60 +204,14 @@ class ReadMoreTextState extends State<ReadMoreText> {
       //     children: [],
       //   );
       // }
-      case TrimMode.Line:
+      case TrimMode.line:
         if (textPainter.didExceedMaxLines) {
-          // return _buildData(
-          //   data: _readMore
-          //       ? widget.data.substring(0, endIndex) +
-          //           (linkLongerThanLine ? _kLineSeparator : '')
-          //       : widget.data,
-          //   // textStyle: effectiveTextStyle,
-          //   // children: [delimiter, link],
-          // );
-
           final textSpan =
               _readMore ? widget.data.substring(0, endIndex) : widget.data;
           return TextSpan(children: [textSpan, actionText]);
         } else {
           return TextSpan(children: [widget.data, actionText]);
         }
-      default:
-        throw Exception('TrimMode type: ${widget.trimMode} is not supported');
     }
-  }
-}
-
-extension TextSpanExtension on TextSpan {
-  TextSpan copyWith(
-      {String? text, TextStyle? style, List<TextSpan>? children}) {
-    return TextSpan(
-      text: text ?? this.text,
-      style: style ?? this.style,
-      children: children ?? this.children,
-    );
-  }
-
-  TextSpan substring(int start, int end) {
-    final substringSpan = <TextSpan>[];
-    int lengthCount = 0;
-
-    visitChildren((span) {
-      if (lengthCount >= end + 1) return false;
-
-      final missingCount = (end + 1) - lengthCount;
-      if (span is TextSpan) {
-        substringSpan.add(
-          TextSpan(
-            text: span.text!.substring(0, min(missingCount, span.text!.length)),
-            style: span.style,
-          ),
-        );
-        lengthCount += span.text!.length;
-      }
-
-      return true;
-    });
-
-    return TextSpan(children: substringSpan);
   }
 }
