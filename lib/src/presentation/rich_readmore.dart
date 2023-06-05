@@ -2,9 +2,9 @@ library rich_readmore;
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:rich_readmore/core/extensions/text_span_extensions.dart';
-import 'package:rich_readmore/data/models/settings.dart';
-import 'package:rich_readmore/data/models/trim_modes.dart';
+import 'package:rich_readmore/src/core/extensions/text_span_extensions.dart';
+import 'package:rich_readmore/src/data/models/settings.dart';
+import 'package:rich_readmore/src/data/models/trim_modes.dart';
 
 class RichReadMoreText extends StatefulWidget {
   /// A widget that displays text with an option to show more or show less based on the provided settings.

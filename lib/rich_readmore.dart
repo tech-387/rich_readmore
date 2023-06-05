@@ -1,2 +1,2 @@
-export './presentation/rich_readmore.dart';
-export './data/models/settings.dart';
+export './src/presentation/rich_readmore.dart';
+export './src/data/models/settings.dart';
