@@ -88,85 +88,82 @@ class ReadMoreTextState extends State<ReadMoreText> {
       recognizer: TapGestureRecognizer()..onTap = _onTapLink,
     );
 
-    Widget result = LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) {
-        assert(constraints.hasBoundedWidth);
-        final double maxWidth = constraints.maxWidth;
-
-        // Layout and measure link
-        TextPainter textPainter = TextPainter(
-          text: actionText,
-          textAlign: textAlign,
-          textDirection: textDirection,
-          textScaleFactor: textScaleFactor,
-          maxLines: widget.settings is LineModeSettings
-              ? (widget.settings as LineModeSettings).trimLines
-              : null,
-          locale: locale,
-        );
-        textPainter.layout(minWidth: 0, maxWidth: maxWidth);
-        final actionTextSize = textPainter.size;
-
-        // Layout and measure text
-        textPainter.text = widget.data;
-        textPainter.layout(minWidth: constraints.minWidth, maxWidth: maxWidth);
-        final textSize = textPainter.size;
-
-        // Get the endIndex of data
-        bool actionTextLongerThanLine = false;
-        int endIndex;
-
-        if (actionTextSize.width < maxWidth) {
-          final readMoreSize = actionTextSize.width;
-          final pos = textPainter.getPositionForOffset(Offset(
-            textDirection == TextDirection.rtl
-                ? readMoreSize
-                : textSize.width - readMoreSize,
-            textSize.height,
-          ));
-          endIndex = textPainter.getOffsetBefore(pos.offset) ?? 0;
-        } else {
-          var pos = textPainter.getPositionForOffset(
-            textSize.bottomLeft(Offset.zero),
-          );
-          endIndex = pos.offset;
-          actionTextLongerThanLine = true;
-        }
-
-        var textSpan = _getTextSpanForTrimMode(
-            trimMode: widget.settings.trimMode,
-            // effectiveTextStyle: effectiveTextStyle,
-            actionText: actionText,
-            textPainter: textPainter,
-            endIndex: endIndex,
-            actionTextLongerThanLine: actionTextLongerThanLine);
-
-        return Text.rich(
-          textSpan,
-          textAlign: textAlign,
-          textDirection: textDirection,
-          softWrap: true,
-          overflow: TextOverflow.clip,
-          textScaleFactor: textScaleFactor,
-        );
-      },
-    );
-    if (widget.semanticsLabel != null) {
-      result = Semantics(
-        textDirection: widget.textDirection,
-        label: widget.semanticsLabel,
-        child: ExcludeSemantics(
-          child: result,
-        ),
-      );
-    }
     return GestureDetector(
-      child: result,
       onTap: () {
         setState(() {
           _readMore = !_readMore;
         });
       },
+      child: Semantics(
+        textDirection: widget.textDirection,
+        label: widget.semanticsLabel,
+        child: ExcludeSemantics(
+          child: LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+              assert(constraints.hasBoundedWidth);
+              final double maxWidth = constraints.maxWidth;
+
+              // Layout and measure link
+              TextPainter textPainter = TextPainter(
+                text: actionText,
+                textAlign: textAlign,
+                textDirection: textDirection,
+                textScaleFactor: textScaleFactor,
+                maxLines: widget.settings is LineModeSettings
+                    ? (widget.settings as LineModeSettings).trimLines
+                    : null,
+                locale: locale,
+              );
+              textPainter.layout(minWidth: 0, maxWidth: maxWidth);
+              final actionTextSize = textPainter.size;
+
+              // Layout and measure text
+              textPainter.text = widget.data;
+              textPainter.layout(
+                  minWidth: constraints.minWidth, maxWidth: maxWidth);
+              final textSize = textPainter.size;
+
+              // Get the endIndex of data
+              bool actionTextLongerThanLine = false;
+              int endIndex;
+
+              if (actionTextSize.width < maxWidth) {
+                final readMoreSize = actionTextSize.width * 1.5;
+                final pos = textPainter.getPositionForOffset(Offset(
+                  textDirection == TextDirection.rtl
+                      ? readMoreSize
+                      : textSize.width - readMoreSize,
+                  textSize.height,
+                ));
+                endIndex = textPainter.getOffsetBefore(pos.offset) ?? 0;
+              } else {
+                var pos = textPainter.getPositionForOffset(
+                  textSize.bottomLeft(Offset.zero),
+                );
+                endIndex = pos.offset;
+                actionTextLongerThanLine = true;
+              }
+
+              var textSpan = _getTextSpanForTrimMode(
+                  trimMode: widget.settings.trimMode,
+                  // effectiveTextStyle: effectiveTextStyle,
+                  actionText: actionText,
+                  textPainter: textPainter,
+                  endIndex: endIndex,
+                  actionTextLongerThanLine: actionTextLongerThanLine);
+
+              return Text.rich(
+                textSpan,
+                textAlign: textAlign,
+                textDirection: textDirection,
+                softWrap: true,
+                overflow: TextOverflow.clip,
+                textScaleFactor: textScaleFactor,
+              );
+            },
+          ),
+        ),
+      ),
     );
   }
 
