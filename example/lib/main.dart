@@ -1,7 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:readmore/data/models/settings.dart';
-import 'package:readmore/readmore.dart';
+import 'package:rich_readmore/rich_readmore.dart';
 
 void main() {
   runApp(MyApp());
@@ -76,7 +75,7 @@ class DemoApp extends StatelessWidget {
               Padding(
                 key: const Key('showMore'),
                 padding: const EdgeInsets.all(16.0),
-                child: ReadMoreText.fromString(
+                child: RichReadMoreText.fromString(
                   text:
                       'Flutter is Google’s mobile UI open source framework to build high-quality native (super fast) interfaces for iOS and Android apps with the unified codebase.',
                   textStyle: TextStyle(
@@ -96,7 +95,7 @@ class DemoApp extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: ReadMoreText(
+                child: RichReadMoreText(
                   textSpan,
                   settings: LineModeSettings(
                     trimLines: 3,

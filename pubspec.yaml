@@ -1,7 +1,7 @@
-name: readmore
-description: A Flutter package than allow expand and collapse text dynamically
-version: 2.2.0
-homepage: https://github.com/jonataslaw/loadmore
+name: rich_readmore
+description: A widget that displays text with an option to show more or show less based on the provided settings.
+version: 1.0.0
+homepage: https://github.com/thierryoliveira/rich_readmore
 
 environment:
   sdk: ">=2.17.0 <3.0.0"

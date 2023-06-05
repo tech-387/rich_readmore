@@ -1,22 +1,22 @@
-library readmore;
+library rich_readmore;
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:readmore/core/extensions/text_span_extensions.dart';
-import 'package:readmore/data/models/settings.dart';
-import 'package:readmore/data/models/trim_modes.dart';
+import 'package:rich_readmore/core/extensions/text_span_extensions.dart';
+import 'package:rich_readmore/data/models/settings.dart';
+import 'package:rich_readmore/data/models/trim_modes.dart';
 
-class ReadMoreText extends StatefulWidget {
+class RichReadMoreText extends StatefulWidget {
   /// A widget that displays text with an option to show more or show less based on the provided settings.
   ///
-  /// The `ReadMoreText` widget allows you to trim text either based on the character length or the number of lines.
+  /// The `RichReadMoreText` widget allows you to trim text either based on the character length or the number of lines.
   /// When the text is longer than the specified trim length or exceeds the maximum number of lines, it provides a
   /// toggle option to show more or show less of the text.
-  /// If you want to pass a [String] instead of TextSpan, take a look at the `ReadMoreText.fromString()` constructor.
+  /// If you want to pass a [String] instead of TextSpan, take a look at the `RichReadMoreText.fromString()` constructor.
   ///
   /// Example usage:
   /// ```dart
-  ///  ReadMoreText(
+  ///  RichReadMoreText(
   ///    textSpan,
   ///    settings: LineModeSettings(
   ///      trimLines: 3,
@@ -26,7 +26,7 @@ class ReadMoreText extends StatefulWidget {
   ///    ),
   ///  ),
   /// ```
-  const ReadMoreText(
+  const RichReadMoreText(
     this.data, {
     Key? key,
     required this.settings,
@@ -34,7 +34,7 @@ class ReadMoreText extends StatefulWidget {
 
   /// A widget that displays text with an option to show more or show less based on the provided settings.
   ///
-  /// The `ReadMoreText` widget allows you to trim text either based on the character length or the number of lines.
+  /// The `RichReadMoreText` widget allows you to trim text either based on the character length or the number of lines.
   /// When the text is longer than the specified trim length or exceeds the maximum number of lines, it provides a
   /// toggle option to show more or show less of the text.
   ///
@@ -43,7 +43,7 @@ class ReadMoreText extends StatefulWidget {
   /// [textStyle] is the style for the [text]
   /// Example usage:
   /// ```dart
-  ///  ReadMoreText.fromString(
+  ///  RichReadMoreText.fromString(
   ///    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
   ///    textStyle: TextStyle(color: Colors.purpleAccent),
   ///    settings: LengthModeSettings(
@@ -56,7 +56,7 @@ class ReadMoreText extends StatefulWidget {
   ///    ),
   ///  ),
   /// ```
-  ReadMoreText.fromString({
+  RichReadMoreText.fromString({
     Key? key,
     required String text,
     TextStyle? textStyle,
@@ -73,10 +73,10 @@ class ReadMoreText extends StatefulWidget {
   final TextSpan data;
 
   @override
-  ReadMoreTextState createState() => ReadMoreTextState();
+  RichReadMoreTextState createState() => RichReadMoreTextState();
 }
 
-class ReadMoreTextState extends State<ReadMoreText> {
+class RichReadMoreTextState extends State<RichReadMoreText> {
   bool _readMore = true;
   late final TextAlign textAlign;
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:readmore/data/models/trim_modes.dart';
+import 'package:rich_readmore/data/models/trim_modes.dart';
 
 abstract class ReadMoreSettings {
   final TrimMode trimMode;

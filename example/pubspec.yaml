@@ -23,7 +23,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  readmore:
+  rich_readmore:
     path: ../
 
 
