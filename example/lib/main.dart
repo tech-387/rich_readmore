@@ -73,53 +73,38 @@ class DemoApp extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              // Padding(
-              //   key: const Key('showMore'),
-              //   padding: const EdgeInsets.all(16.0),
-              //   child: ReadMoreText(
-              //     'Flutter is Google’s mobile UI open source framework to build high-quality native (super fast) interfaces for iOS and Android apps with the unified codebase.',
-              //     trimLines: 2,
-              //     preDataText: "AMANDA",
-              //     preDataTextStyle: TextStyle(fontWeight: FontWeight.w500),
-              //     style: TextStyle(color: Colors.black),
-              //     colorClickableText: Colors.pink,
-              //     trimMode: TrimMode.Line,
-              //     trimCollapsedText: '...Show more',
-              //     trimExpandedText: ' show less',
-              //   ),
-              // ),
-              // Divider(
-              //   color: const Color(0xFF167F67),
-              // ),
+              Padding(
+                key: const Key('showMore'),
+                padding: const EdgeInsets.all(16.0),
+                child: ReadMoreText.fromString(
+                  text:
+                      'Flutter is Google’s mobile UI open source framework to build high-quality native (super fast) interfaces for iOS and Android apps with the unified codebase.',
+                  textStyle: TextStyle(color: Colors.purpleAccent),
+                  settings: LengthModeSettings(
+                    trimLength: 20,
+                    colorClickableText: Colors.pink,
+                    trimCollapsedText: '...Show more',
+                    trimExpandedText: ' show less',
+                    lessStyle: TextStyle(color: Colors.yellow),
+                    moreStyle: TextStyle(color: Colors.yellow),
+                  ),
+                ),
+              ),
+              Divider(
+                color: const Color(0xFF167F67),
+              ),
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: ReadMoreText(
                   textSpan,
-                  // settings: LineModeSettings(trimLines: 3),
                   settings: LineModeSettings(
                     trimLines: 3,
-                    style: TextStyle(color: Colors.black),
                     colorClickableText: Colors.pink,
                     trimCollapsedText: 'Expand',
                     trimExpandedText: ' Collapse ',
                   ),
                 ),
               ),
-              // Divider(
-              //   color: const Color(0xFF167F67),
-              // ),
-              // Padding(
-              //   padding: const EdgeInsets.all(16.0),
-              //   child: ReadMoreText(
-              //     'The Flutter framework builds its layout via the composition of widgets, everything that you construct programmatically is a widget and these are compiled together to create the user interface. ',
-              //     trimLines: 2,
-              //     style: TextStyle(color: Colors.black),
-              //     colorClickableText: Colors.pink,
-              //     trimMode: TrimMode.Line,
-              //     trimCollapsedText: '...Read more',
-              //     trimExpandedText: ' Less',
-              //   ),
-              // ),
             ],
           ),
         ),
