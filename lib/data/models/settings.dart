@@ -6,7 +6,6 @@ abstract class ReadMoreSettings {
   final String trimExpandedText;
   final String trimCollapsedText;
   final Color? colorClickableText;
-  final TextStyle? style;
   final TextAlign? textAlign;
   final TextDirection? textDirection;
   final Locale? locale;
@@ -27,7 +26,6 @@ abstract class ReadMoreSettings {
     this.trimExpandedText = 'show less',
     this.trimCollapsedText = 'read more',
     this.colorClickableText,
-    this.style,
     this.textAlign,
     this.textDirection,
     this.locale,
@@ -48,7 +46,6 @@ class LineModeSettings extends ReadMoreSettings {
       super.trimExpandedText,
       super.trimCollapsedText,
       super.colorClickableText,
-      super.style,
       super.textAlign,
       super.textDirection,
       super.locale,
@@ -69,7 +66,6 @@ class LengthModeSettings extends ReadMoreSettings {
       super.trimExpandedText,
       super.trimCollapsedText,
       super.colorClickableText,
-      super.style,
       super.textAlign,
       super.textDirection,
       super.locale,

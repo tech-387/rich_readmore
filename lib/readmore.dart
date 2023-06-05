@@ -7,24 +7,69 @@ import 'package:readmore/data/models/settings.dart';
 import 'package:readmore/data/models/trim_modes.dart';
 
 class ReadMoreText extends StatefulWidget {
+  /// A widget that displays text with an option to show more or show less based on the provided settings.
+  ///
+  /// The `ReadMoreText` widget allows you to trim text either based on the character length or the number of lines.
+  /// When the text is longer than the specified trim length or exceeds the maximum number of lines, it provides a
+  /// toggle option to show more or show less of the text.
+  /// If you want to pass a [String] instead of TextSpan, take a look at the `ReadMoreText.fromString()` constructor.
+  ///
+  /// Example usage:
+  /// ```dart
+  ///  ReadMoreText(
+  ///    textSpan,
+  ///    settings: LineModeSettings(
+  ///      trimLines: 3,
+  ///      colorClickableText: Colors.pink,
+  ///      trimCollapsedText: 'Expand',
+  ///      trimExpandedText: ' Collapse ',
+  ///    ),
+  ///  ),
+  /// ```
   const ReadMoreText(
     this.data, {
     Key? key,
     required this.settings,
   }) : super(key: key);
 
-  /// Receives the [data] as String instead of RichText directly
+  /// A widget that displays text with an option to show more or show less based on the provided settings.
+  ///
+  /// The `ReadMoreText` widget allows you to trim text either based on the character length or the number of lines.
+  /// When the text is longer than the specified trim length or exceeds the maximum number of lines, it provides a
+  /// toggle option to show more or show less of the text.
+  ///
+  /// [text] is the text that will be displayed
+  ///
+  /// [textStyle] is the style for the [text]
+  /// Example usage:
+  /// ```dart
+  ///  ReadMoreText.fromString(
+  ///    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+  ///    textStyle: TextStyle(color: Colors.purpleAccent),
+  ///    settings: LengthModeSettings(
+  ///      trimLength: 20,
+  ///      colorClickableText: Colors.pink,
+  ///      trimCollapsedText: '...Show more',
+  ///      trimExpandedText: ' Show less',
+  ///      lessStyle: TextStyle(color: Colors.blue),
+  ///      moreStyle: TextStyle(color: Colors.blue),
+  ///    ),
+  ///  ),
+  /// ```
   ReadMoreText.fromString({
     Key? key,
     required String text,
+    TextStyle? textStyle,
     required this.settings,
-  }) : data = TextSpan(text: text);
+  }) : data = TextSpan(text: text, style: textStyle);
 
-  /// Can accept two different types of objects, [LineModeSettings] or [LengthModeSettings]
+  /// The settings to control the trimming behavior.
+  /// Can accept two different types, [LineModeSettings] or [LengthModeSettings]
   /// * Use [LineModeSettings] for trimming with a specific line number
   /// * Use [LengthModeSettings] for trimming with a specific character length
   final ReadMoreSettings settings;
 
+  ///  The text to be displayed
   final TextSpan data;
 
   @override
