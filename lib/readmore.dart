@@ -62,6 +62,35 @@ class ReadMoreText extends StatefulWidget {
 
 class ReadMoreTextState extends State<ReadMoreText> {
   bool _readMore = true;
+  late final TextAlign textAlign;
+  late final TextDirection textDirection;
+  late final double textScaleFactor;
+  late final Locale? locale;
+
+  /// The string for say if the actions is expand or collapse
+  late TextSpan actionText;
+
+  @override
+  void initState() {
+    super.initState();
+    textAlign = widget.textAlign ?? TextAlign.start;
+    actionText = updateActionText(isExpanded: _readMore);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    textDirection = widget.textDirection ?? Directionality.of(context);
+    textScaleFactor =
+        widget.textScaleFactor ?? MediaQuery.textScaleFactorOf(context);
+    locale = widget.locale ?? Localizations.maybeLocaleOf(context);
+  }
+
+  TextSpan updateActionText({required bool isExpanded}) => TextSpan(
+        text: isExpanded ? widget.trimCollapsedText : widget.trimExpandedText,
+        style: isExpanded ? widget.moreStyle : widget.lessStyle,
+        recognizer: TapGestureRecognizer()..onTap = _onTapLink,
+      );
 
   void _onTapLink() {
     setState(() {
@@ -71,23 +100,13 @@ class ReadMoreTextState extends State<ReadMoreText> {
   }
 
   @override
+  void setState(VoidCallback fn) {
+    super.setState(fn);
+    actionText = updateActionText(isExpanded: _readMore);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final textAlign = widget.textAlign ?? TextAlign.start;
-    final textDirection = widget.textDirection ?? Directionality.of(context);
-    final textScaleFactor =
-        widget.textScaleFactor ?? MediaQuery.textScaleFactorOf(context);
-    final locale = widget.locale ?? Localizations.maybeLocaleOf(context);
-
-    final _defaultLessStyle = widget.lessStyle;
-    final _defaultMoreStyle = widget.moreStyle;
-
-    /// The string for say if the actions is expand or collapse
-    TextSpan actionText = TextSpan(
-      text: _readMore ? widget.trimCollapsedText : widget.trimExpandedText,
-      style: _readMore ? _defaultMoreStyle : _defaultLessStyle,
-      recognizer: TapGestureRecognizer()..onTap = _onTapLink,
-    );
-
     return GestureDetector(
       onTap: () {
         setState(() {
