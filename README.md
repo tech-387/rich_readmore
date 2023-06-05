@@ -12,11 +12,11 @@ If you want to pass a string directly instead of a TextSpan, you can just be usi
 add to your pubspec
 
 ```
-readmore: ^2.1.0
+rich_readmore: ^1.0.1
 ```
 and import:
 ```
-import 'package:readmore/readmore.dart';
+import 'package:rich_readmore/rich_readmore.dart';
 ```
 For TextSpan data:
  ```dart

@@ -1,16 +1,8 @@
-## [2.2.0]
-- Update to Flutter 3.
-
-## [2.1.0]
-- add RTL support
-
-## [2.0.0]
-- nullsafety
+## [1.0.2]
+- Update readme with the valid instructions for use
 
 ## [1.0.1] 
-- Remove debug statements 
-- Add delimiter span && style for trimExpandedText & trimCollapsedText
-- Fix linkSize on ListView
-
+- Fix first node style not applied when collapsed
+- Update demonstration GIF
 ## [1.0.0] 
 - initial release
