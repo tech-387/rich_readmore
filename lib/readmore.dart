@@ -141,6 +141,11 @@ class ReadMoreTextState extends State<ReadMoreText> {
     );
   }
 
+  /// Returns a [TextSpan] adding the [actionText] on the children
+  TextSpan _buildTextSpan(TextSpan span) =>
+      TextSpan(children: [span, actionText]);
+
+  /// Returns a treated TextSpan depending on the [TrimMode] provided.
   TextSpan _getTextSpanForTrimMode(
       {required TrimMode trimMode,
       // TextStyle? effectiveTextStyle,
@@ -156,21 +161,18 @@ class ReadMoreTextState extends State<ReadMoreText> {
           final textSpan = _readMore
               ? widget.data.substring(0, lengthSettings.trimLength)
               : widget.data;
-          return TextSpan(children: [textSpan, actionText]);
+          return _buildTextSpan(textSpan);
         } else {
-          return TextSpan(children: [widget.data, actionText]);
+          return _buildTextSpan(widget.data);
         }
       case TrimMode.line:
         if (textPainter.didExceedMaxLines) {
           final textSpan =
               _readMore ? widget.data.substring(0, endIndex) : widget.data;
-          return TextSpan(children: [textSpan, actionText]);
+          return _buildTextSpan(textSpan);
         } else {
-          return TextSpan(children: [widget.data, actionText]);
+          return _buildTextSpan(widget.data);
         }
-      default:
-        throw Exception(
-            'TrimMode type: ${widget.settings.trimMode} is not supported');
     }
   }
 }
