@@ -96,11 +96,13 @@ class DemoApp extends StatelessWidget {
                 child: ReadMoreText(
                   textSpan,
                   // settings: LineModeSettings(trimLines: 3),
-                  settings: LineModeSettings(trimLines: 3),
-                  style: TextStyle(color: Colors.black),
-                  colorClickableText: Colors.pink,
-                  trimCollapsedText: 'Expand',
-                  trimExpandedText: ' Collapse ',
+                  settings: LineModeSettings(
+                    trimLines: 3,
+                    style: TextStyle(color: Colors.black),
+                    colorClickableText: Colors.pink,
+                    trimCollapsedText: 'Expand',
+                    trimExpandedText: ' Collapse ',
+                  ),
                 ),
               ),
               // Divider(

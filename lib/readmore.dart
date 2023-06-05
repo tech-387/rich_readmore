@@ -11,44 +11,21 @@ class ReadMoreText extends StatefulWidget {
     this.data, {
     Key? key,
     required this.settings,
-    this.trimExpandedText = 'show less',
-    this.trimCollapsedText = 'read more',
-    this.colorClickableText,
-    this.style,
-    this.textAlign,
-    this.textDirection,
-    this.locale,
-    this.textScaleFactor,
-    this.semanticsLabel,
-    this.moreStyle,
-    this.lessStyle,
-    this.callback,
   }) : super(key: key);
+
+  /// Receives the [data] as String instead of RichText directly
+  ReadMoreText.fromString({
+    Key? key,
+    required String text,
+    required this.settings,
+  }) : data = TextSpan(text: text);
 
   /// Can accept two different types of objects, [LineModeSettings] or [LengthModeSettings]
   /// * Use [LineModeSettings] for trimming with a specific line number
   /// * Use [LengthModeSettings] for trimming with a specific character length
   final ReadMoreSettings settings;
 
-  /// TextStyle for expanded text
-  final TextStyle? moreStyle;
-
-  /// TextStyle for compressed text
-  final TextStyle? lessStyle;
-
-  ///Called when state change between expanded/compress
-  final Function(bool val)? callback;
-
   final TextSpan data;
-  final String trimExpandedText;
-  final String trimCollapsedText;
-  final Color? colorClickableText;
-  final TextStyle? style;
-  final TextAlign? textAlign;
-  final TextDirection? textDirection;
-  final Locale? locale;
-  final double? textScaleFactor;
-  final String? semanticsLabel;
 
   @override
   ReadMoreTextState createState() => ReadMoreTextState();
@@ -64,20 +41,23 @@ class ReadMoreTextState extends State<ReadMoreText> {
   @override
   void initState() {
     super.initState();
-    textAlign = widget.textAlign ?? TextAlign.start;
+    textAlign = widget.settings.textAlign ?? TextAlign.start;
     actionText = updateActionText(isExpanded: _readMore);
   }
 
   TextSpan updateActionText({required bool isExpanded}) => TextSpan(
-        text: isExpanded ? widget.trimCollapsedText : widget.trimExpandedText,
-        style: isExpanded ? widget.moreStyle : widget.lessStyle,
+        text: isExpanded
+            ? widget.settings.trimCollapsedText
+            : widget.settings.trimExpandedText,
+        style:
+            isExpanded ? widget.settings.moreStyle : widget.settings.lessStyle,
         recognizer: TapGestureRecognizer()..onTap = _onTapLink,
       );
 
   void _onTapLink() {
     setState(() {
       _readMore = !_readMore;
-      widget.callback?.call(_readMore);
+      widget.settings.callback?.call(_readMore);
     });
   }
 
@@ -90,8 +70,8 @@ class ReadMoreTextState extends State<ReadMoreText> {
   @override
   Widget build(BuildContext context) {
     return Semantics(
-      textDirection: widget.textDirection,
-      label: widget.semanticsLabel,
+      textDirection: widget.settings.textDirection,
+      label: widget.settings.semanticsLabel,
       child: ExcludeSemantics(
         child: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
@@ -102,12 +82,12 @@ class ReadMoreTextState extends State<ReadMoreText> {
             TextPainter textPainter = TextPainter(
               text: actionText,
               textAlign: textAlign,
-              textDirection: widget.textDirection ?? TextDirection.rtl,
-              textScaleFactor: widget.textScaleFactor ?? 1.0,
+              textDirection: widget.settings.textDirection ?? TextDirection.rtl,
+              textScaleFactor: widget.settings.textScaleFactor ?? 1.0,
               maxLines: widget.settings is LineModeSettings
                   ? (widget.settings as LineModeSettings).trimLines
                   : null,
-              locale: widget.locale,
+              locale: widget.settings.locale,
             );
             textPainter.layout(minWidth: 0, maxWidth: maxWidth);
             final actionTextSize = textPainter.size;
@@ -125,7 +105,7 @@ class ReadMoreTextState extends State<ReadMoreText> {
             if (actionTextSize.width < maxWidth) {
               final readMoreSize = actionTextSize.width;
               final pos = textPainter.getPositionForOffset(Offset(
-                widget.textDirection == TextDirection.rtl
+                widget.settings.textDirection == TextDirection.rtl
                     ? readMoreSize
                     : textSize.width - readMoreSize,
                 textSize.height,
@@ -150,10 +130,10 @@ class ReadMoreTextState extends State<ReadMoreText> {
             return Text.rich(
               textSpan,
               textAlign: textAlign,
-              textDirection: widget.textDirection,
+              textDirection: widget.settings.textDirection,
               softWrap: true,
               overflow: TextOverflow.clip,
-              textScaleFactor: widget.textScaleFactor,
+              textScaleFactor: widget.settings.textScaleFactor,
             );
           },
         ),
@@ -188,6 +168,9 @@ class ReadMoreTextState extends State<ReadMoreText> {
         } else {
           return TextSpan(children: [widget.data, actionText]);
         }
+      default:
+        throw Exception(
+            'TrimMode type: ${widget.settings.trimMode} is not supported');
     }
   }
 }
