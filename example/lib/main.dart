@@ -34,9 +34,9 @@ class DemoApp extends StatelessWidget {
           style: TextStyle(color: Colors.red, fontSize: 18),
         ),
         TextSpan(
-            text:
-                'It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old',
-            style: TextStyle(fontSize: 24)),
+          text:
+              'It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old',
+        ),
         TextSpan(
             text: ' Sign up',
             style: TextStyle(color: Colors.blueAccent, fontSize: 18),
@@ -79,14 +79,15 @@ class DemoApp extends StatelessWidget {
                 child: ReadMoreText.fromString(
                   text:
                       'Flutter is Google’s mobile UI open source framework to build high-quality native (super fast) interfaces for iOS and Android apps with the unified codebase.',
-                  textStyle: TextStyle(color: Colors.purpleAccent),
+                  textStyle: TextStyle(
+                      color: Colors.blueGrey, fontWeight: FontWeight.bold),
                   settings: LengthModeSettings(
-                    trimLength: 20,
+                    trimLength: 50,
                     colorClickableText: Colors.pink,
                     trimCollapsedText: '...Show more',
                     trimExpandedText: ' show less',
-                    lessStyle: TextStyle(color: Colors.yellow),
-                    moreStyle: TextStyle(color: Colors.yellow),
+                    lessStyle: TextStyle(color: Colors.blue),
+                    moreStyle: TextStyle(color: Colors.blue),
                   ),
                 ),
               ),
@@ -100,7 +101,7 @@ class DemoApp extends StatelessWidget {
                   settings: LineModeSettings(
                     trimLines: 3,
                     colorClickableText: Colors.pink,
-                    trimCollapsedText: 'Expand',
+                    trimCollapsedText: '...Expand',
                     trimExpandedText: ' Collapse ',
                   ),
                 ),
