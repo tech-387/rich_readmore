@@ -95,14 +95,12 @@ class DemoApp extends StatelessWidget {
                 padding: const EdgeInsets.all(16.0),
                 child: ReadMoreText(
                   textSpan,
+                  // settings: LineModeSettings(trimLines: 3),
                   settings: LineModeSettings(trimLines: 3),
                   style: TextStyle(color: Colors.black),
                   colorClickableText: Colors.pink,
                   trimCollapsedText: 'Expand',
                   trimExpandedText: ' Collapse ',
-                  onLinkPressed: (url) {
-                    print(url);
-                  },
                 ),
               ),
               // Divider(
