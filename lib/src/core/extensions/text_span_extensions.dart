@@ -33,6 +33,6 @@ extension TextSpanExtension on TextSpan {
       return true;
     });
 
-    return TextSpan(children: substringSpan);
+    return TextSpan(children: substringSpan, style: style);
   }
 }

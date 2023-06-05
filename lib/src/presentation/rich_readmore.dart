@@ -91,9 +91,10 @@ class RichReadMoreTextState extends State<RichReadMoreText> {
   }
 
   TextSpan updateActionText({required bool isExpanded}) => TextSpan(
-        text: isExpanded
-            ? widget.settings.trimCollapsedText
-            : widget.settings.trimExpandedText,
+        text: ' ' +
+            (isExpanded
+                ? widget.settings.trimCollapsedText
+                : widget.settings.trimExpandedText),
         style:
             isExpanded ? widget.settings.moreStyle : widget.settings.lessStyle,
         recognizer: TapGestureRecognizer()..onTap = _onTapLink,
