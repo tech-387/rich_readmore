@@ -49,5 +49,3 @@ app.*.map.json
 *.keystore
 !debug.keystore
 release-key.properties
-
-pubspec.lock
