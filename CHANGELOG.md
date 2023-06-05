@@ -1,3 +1,6 @@
+## [1.0.3]
+- Improve readme documentation
+
 ## [1.0.2]
 - Update readme with the valid instructions for use
 
