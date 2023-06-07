@@ -17,17 +17,18 @@ extension TextSpanExtension on TextSpan {
     int lengthCount = 0;
 
     visitChildren((span) {
-      if (lengthCount >= end + 1) return false;
+      if (lengthCount > end) return false;
 
-      final missingCount = (end + 1) - lengthCount;
+      final missingCount = end - lengthCount;
       if (span is TextSpan) {
         substringSpan.add(
           TextSpan(
-            text: span.text!.substring(0, min(missingCount, span.text!.length)),
+            text: span.text
+                ?.substring(0, min(missingCount, span.text?.length ?? 0)),
             style: span.style,
           ),
         );
-        lengthCount += span.text!.length;
+        lengthCount += span.text?.length ?? 0;
       }
 
       return true;
