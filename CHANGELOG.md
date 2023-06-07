@@ -1,3 +1,7 @@
+## [1.0.4]
+- Remove null aware operator for reaching a better code
+- Add unit tests for the Helper class (100% coverage on TextSpanHelper)
+
 ## [1.0.3]
 - Improve readme documentation
 

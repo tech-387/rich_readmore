@@ -12,7 +12,7 @@ If you want to pass a string directly instead of a TextSpan, you can just be usi
 add to your pubspec
 
 ```
-rich_readmore: ^1.0.1
+rich_readmore: ^1.0.4
 ```
 and import:
 ```
