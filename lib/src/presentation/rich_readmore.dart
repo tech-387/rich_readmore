@@ -1,10 +1,8 @@
 library rich_readmore;
 
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:rich_readmore/src/core/extensions/text_span_extensions.dart';
+import 'package:rich_readmore/src/core/helpers/text_span_helper.dart';
 import 'package:rich_readmore/src/data/models/settings.dart';
-import 'package:rich_readmore/src/data/models/trim_modes.dart';
 
 class RichReadMoreText extends StatefulWidget {
   /// A widget that displays text with an option to show more or show less based on the provided settings.
@@ -73,32 +71,31 @@ class RichReadMoreText extends StatefulWidget {
   final TextSpan data;
 
   @override
-  RichReadMoreTextState createState() => RichReadMoreTextState();
+  _RichReadMoreTextState createState() => _RichReadMoreTextState();
 }
 
-class RichReadMoreTextState extends State<RichReadMoreText> {
+class _RichReadMoreTextState extends State<RichReadMoreText> {
   bool _readMore = true;
+
+  /// The alignment for the text
+  ///
+  /// Is set to `TextAlign.start` if the [settings.textAlign] is null
   late final TextAlign textAlign;
 
   /// The string for say if the actions is expand or collapse
   late TextSpan actionText;
 
+  /// The helper class that contains the methods for managing the textSpans
+  late final TextSpanHelper textSpanHelper;
+
   @override
   void initState() {
     super.initState();
     textAlign = widget.settings.textAlign ?? TextAlign.start;
-    actionText = updateActionText(isExpanded: _readMore);
+    textSpanHelper = TextSpanHelper();
+    actionText = textSpanHelper.updateActionText(
+        isExpanded: _readMore, onTap: _onTapLink, settings: widget.settings);
   }
-
-  TextSpan updateActionText({required bool isExpanded}) => TextSpan(
-        text: ' ' +
-            (isExpanded
-                ? widget.settings.trimCollapsedText
-                : widget.settings.trimExpandedText),
-        style:
-            isExpanded ? widget.settings.moreStyle : widget.settings.lessStyle,
-        recognizer: TapGestureRecognizer()..onTap = _onTapLink,
-      );
 
   void _onTapLink() {
     setState(() {
@@ -110,7 +107,8 @@ class RichReadMoreTextState extends State<RichReadMoreText> {
   @override
   void setState(VoidCallback fn) {
     super.setState(fn);
-    actionText = updateActionText(isExpanded: _readMore);
+    actionText = textSpanHelper.updateActionText(
+        isExpanded: _readMore, onTap: _onTapLink, settings: widget.settings);
   }
 
   @override
@@ -122,6 +120,7 @@ class RichReadMoreTextState extends State<RichReadMoreText> {
         child: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
             assert(constraints.hasBoundedWidth);
+
             final double maxWidth = constraints.maxWidth;
 
             // Layout and measure link
@@ -144,11 +143,11 @@ class RichReadMoreTextState extends State<RichReadMoreText> {
                 minWidth: constraints.minWidth, maxWidth: maxWidth);
             final textSize = textPainter.size;
 
-            // Get the endIndex of data
-            bool actionTextLongerThanLine = false;
             int endIndex;
 
-            if (actionTextSize.width < maxWidth) {
+            if (widget.settings is LengthModeSettings) {
+              endIndex = (widget.settings as LengthModeSettings).trimLength - 1;
+            } else if (actionTextSize.width < maxWidth) {
               final readMoreSize = actionTextSize.width;
               final pos = textPainter.getPositionForOffset(Offset(
                 widget.settings.textDirection == TextDirection.rtl
@@ -162,16 +161,16 @@ class RichReadMoreTextState extends State<RichReadMoreText> {
                 textSize.bottomLeft(Offset.zero),
               );
               endIndex = pos.offset;
-              actionTextLongerThanLine = true;
             }
 
-            var textSpan = _getTextSpanForTrimMode(
-                trimMode: widget.settings.trimMode,
-                // effectiveTextStyle: effectiveTextStyle,
-                actionText: actionText,
-                textPainter: textPainter,
-                endIndex: endIndex,
-                actionTextLongerThanLine: actionTextLongerThanLine);
+            var textSpan = textSpanHelper.getTextSpanForTrimMode(
+              data: widget.data,
+              settings: widget.settings,
+              isExpanded: _readMore,
+              actionText: actionText,
+              didExceedMaxLines: textPainter.didExceedMaxLines,
+              endIndex: endIndex,
+            );
 
             return Text.rich(
               textSpan,
@@ -185,40 +184,5 @@ class RichReadMoreTextState extends State<RichReadMoreText> {
         ),
       ),
     );
-  }
-
-  /// Returns a [TextSpan] adding the [actionText] on the children
-  TextSpan _buildTextSpan(TextSpan span) =>
-      TextSpan(children: [span, actionText]);
-
-  /// Returns a treated TextSpan depending on the [TrimMode] provided.
-  TextSpan _getTextSpanForTrimMode(
-      {required TrimMode trimMode,
-      // TextStyle? effectiveTextStyle,
-      required TextSpan actionText,
-      required TextPainter textPainter,
-      required int endIndex,
-      required bool actionTextLongerThanLine}) {
-    switch (widget.settings.trimMode) {
-      case TrimMode.length:
-        final LengthModeSettings lengthSettings =
-            widget.settings as LengthModeSettings;
-        if (lengthSettings.trimLength < widget.data.toPlainText().length) {
-          final textSpan = _readMore
-              ? widget.data.substring(0, lengthSettings.trimLength)
-              : widget.data;
-          return _buildTextSpan(textSpan);
-        } else {
-          return _buildTextSpan(widget.data);
-        }
-      case TrimMode.line:
-        if (textPainter.didExceedMaxLines) {
-          final textSpan =
-              _readMore ? widget.data.substring(0, endIndex) : widget.data;
-          return _buildTextSpan(textSpan);
-        } else {
-          return _buildTextSpan(widget.data);
-        }
-    }
   }
 }
