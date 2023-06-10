@@ -3,15 +3,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 extension TextSpanExtension on TextSpan {
-  TextSpan copyWith(
-      {String? text, TextStyle? style, List<TextSpan>? children}) {
-    return TextSpan(
-      text: text ?? this.text,
-      style: style ?? this.style,
-      children: children ?? this.children,
-    );
-  }
-
   TextSpan substring(int start, int end) {
     final substringSpan = <TextSpan>[];
     int lengthCount = 0;
