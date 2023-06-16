@@ -18,9 +18,14 @@ class RichReadMoreText extends StatefulWidget {
   ///    textSpan,
   ///    settings: LineModeSettings(
   ///      trimLines: 3,
-  ///      colorClickableText: Colors.pink,
   ///      trimCollapsedText: 'Expand',
   ///      trimExpandedText: ' Collapse ',
+  ///      onPressReadMore: () {
+  ///       //specific method to be called on press to show more
+  ///      },
+  ///      onPressReadLess: () {
+  ///        // specific method to be called on press to show less
+  ///      },
   ///    ),
   ///  ),
   /// ```
@@ -46,7 +51,6 @@ class RichReadMoreText extends StatefulWidget {
   ///    textStyle: TextStyle(color: Colors.purpleAccent),
   ///    settings: LengthModeSettings(
   ///      trimLength: 20,
-  ///      colorClickableText: Colors.pink,
   ///      trimCollapsedText: '...Show more',
   ///      trimExpandedText: ' Show less',
   ///      lessStyle: TextStyle(color: Colors.blue),
@@ -100,7 +104,11 @@ class _RichReadMoreTextState extends State<RichReadMoreText> {
   void _onTapLink() {
     setState(() {
       _readMore = !_readMore;
-      widget.settings.callback?.call(_readMore);
+      if (_readMore) {
+        widget.settings.onPressReadLess?.call();
+      } else {
+        widget.settings.onPressReadMore?.call();
+      }
     });
   }
 

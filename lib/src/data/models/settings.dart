@@ -5,7 +5,6 @@ abstract class ReadMoreSettings {
   final TrimMode trimMode;
   final String trimExpandedText;
   final String trimCollapsedText;
-  final Color? colorClickableText;
   final TextAlign? textAlign;
   final TextDirection? textDirection;
   final Locale? locale;
@@ -18,14 +17,16 @@ abstract class ReadMoreSettings {
   /// TextStyle for compressed text
   final TextStyle? lessStyle;
 
-  ///Called when state change between expanded/compress
-  final Function(bool val)? callback;
+  /// Callback to be called on press to read more
+  final VoidCallback? onPressReadMore;
+
+  /// Callback to be called on press to read less
+  final VoidCallback? onPressReadLess;
 
   ReadMoreSettings({
     required this.trimMode,
     this.trimExpandedText = 'show less',
     this.trimCollapsedText = 'read more',
-    this.colorClickableText,
     this.textAlign,
     this.textDirection,
     this.locale,
@@ -33,7 +34,8 @@ abstract class ReadMoreSettings {
     this.semanticsLabel,
     this.moreStyle,
     this.lessStyle,
-    this.callback,
+    this.onPressReadMore,
+    this.onPressReadLess,
   });
 }
 
@@ -45,7 +47,6 @@ class LineModeSettings extends ReadMoreSettings {
       {required this.trimLines,
       super.trimExpandedText,
       super.trimCollapsedText,
-      super.colorClickableText,
       super.textAlign,
       super.textDirection,
       super.locale,
@@ -53,7 +54,8 @@ class LineModeSettings extends ReadMoreSettings {
       super.semanticsLabel,
       super.moreStyle,
       super.lessStyle,
-      super.callback})
+      super.onPressReadMore,
+      super.onPressReadLess})
       : super(trimMode: TrimMode.line);
 }
 
@@ -65,7 +67,6 @@ class LengthModeSettings extends ReadMoreSettings {
       {required this.trimLength,
       super.trimExpandedText,
       super.trimCollapsedText,
-      super.colorClickableText,
       super.textAlign,
       super.textDirection,
       super.locale,
@@ -73,6 +74,7 @@ class LengthModeSettings extends ReadMoreSettings {
       super.semanticsLabel,
       super.moreStyle,
       super.lessStyle,
-      super.callback})
+      super.onPressReadMore,
+      super.onPressReadLess})
       : super(trimMode: TrimMode.length);
 }
