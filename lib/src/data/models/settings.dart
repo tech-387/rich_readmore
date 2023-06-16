@@ -18,8 +18,11 @@ abstract class ReadMoreSettings {
   /// TextStyle for compressed text
   final TextStyle? lessStyle;
 
-  ///Called when state change between expanded/compress
-  final Function(bool val)? callback;
+  /// Callback to be called on press to read more
+  final VoidCallback? onPressReadMore;
+
+  /// Callback to be called on press to read less
+  final VoidCallback? onPressReadLess;
 
   ReadMoreSettings({
     required this.trimMode,
@@ -33,7 +36,8 @@ abstract class ReadMoreSettings {
     this.semanticsLabel,
     this.moreStyle,
     this.lessStyle,
-    this.callback,
+    this.onPressReadMore,
+    this.onPressReadLess,
   });
 }
 
@@ -53,7 +57,8 @@ class LineModeSettings extends ReadMoreSettings {
       super.semanticsLabel,
       super.moreStyle,
       super.lessStyle,
-      super.callback})
+      super.onPressReadMore,
+      super.onPressReadLess})
       : super(trimMode: TrimMode.line);
 }
 
@@ -73,6 +78,7 @@ class LengthModeSettings extends ReadMoreSettings {
       super.semanticsLabel,
       super.moreStyle,
       super.lessStyle,
-      super.callback})
+      super.onPressReadMore,
+      super.onPressReadLess})
       : super(trimMode: TrimMode.length);
 }

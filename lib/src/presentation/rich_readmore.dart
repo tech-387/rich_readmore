@@ -100,7 +100,11 @@ class _RichReadMoreTextState extends State<RichReadMoreText> {
   void _onTapLink() {
     setState(() {
       _readMore = !_readMore;
-      widget.settings.callback?.call(_readMore);
+      if (_readMore) {
+        widget.settings.onPressReadLess?.call();
+      } else {
+        widget.settings.onPressReadMore?.call();
+      }
     });
   }
 
