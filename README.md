@@ -6,15 +6,10 @@ When the text is longer than the specified trim length or exceeds the maximum nu
 It has two options for settings, the `LineModeSettings` or `LengthModeSettings` for trimming using the behavior that you want.  
 If you want to pass a string directly instead of a TextSpan, you can just be using the the `RichReadMoreText.fromString(...)`. There are some examples for that below.
 
+## Demonstration  
 ![](read-more-text-view-flutter.gif)
-
-## usage:
-add to your pubspec
-
-```
-rich_readmore: ^1.0.4
-```
-and import:
+## How to use
+import:
 ```
 import 'package:rich_readmore/rich_readmore.dart';
 ```
@@ -56,5 +51,7 @@ Or for String data:
    ),
  ),
 ```
+
+
 
 
