@@ -24,9 +24,14 @@ For TextSpan data:
     textSpan,
     settings: LineModeSettings(
       trimLines: 3,
-      colorClickableText: Colors.pink,
       trimCollapsedText: 'Expand',
       trimExpandedText: ' Collapse ',
+      onPressReadMore: () {
+        /// specific method to be called on press to show more
+      },
+      onPressReadLess: () {
+        /// specific method to be called on press to show less
+      },
     ),
   ),
  ```
@@ -38,9 +43,14 @@ Or for String data:
    textStyle: TextStyle(color: Colors.purpleAccent),
    settings: LengthModeSettings(
      trimLength: 20,
-     colorClickableText: Colors.pink,
-     trimCollapsedText: '...Show more',
-     trimExpandedText: ' Show less',
+     trimCollapsedText: 'Expand',
+     trimExpandedText: ' Collapse ',
+     onPressReadMore: () {
+       /// specific method to be called on press to show more
+     },
+     onPressReadLess: () {
+       /// specific method to be called on press to show less
+     },
      lessStyle: TextStyle(color: Colors.blue),
      moreStyle: TextStyle(color: Colors.blue),
    ),
