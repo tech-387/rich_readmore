@@ -1,4 +1,7 @@
-
+## [1.0.6]
+- Increase test coverage to 100%
+- Integrate with codecov API to have some custom test reports
+- Add CI workflow to run the flutter analyzer and all the tests
 ## [1.0.5]
 - Remove unused colorClickableText property
 - Separate callbacks related to on press read less or more
