@@ -1,6 +1,6 @@
-![example workflow](https://github.com/thierryoliveira/rich_readmore/actions/workflows/rich_readmore.yml/badge.svg)
+![rich_readmore workflow](https://github.com/thierryoliveira/rich_readmore/actions/workflows/rich_readmore.yml/badge.svg)
 [![codecov](https://codecov.io/gh/thierryoliveira/rich_readmore/branch/master/graph/badge.svg?token=210MCG1JFN)](https://codecov.io/gh/thierryoliveira/rich_readmore)
-![GitHub](https://img.shields.io/github/license/thierryoliveira/rich_readmore)
+![MIT License](https://img.shields.io/github/license/thierryoliveira/rich_readmore)
 
 # rich_readmore
 
