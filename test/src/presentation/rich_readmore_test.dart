@@ -12,7 +12,6 @@ void main() {
   group('with LineModeSettings', () {
     final settings = LineModeSettings(
       trimLines: 3,
-      colorClickableText: Colors.pink,
       trimCollapsedText: 'Expand',
       trimExpandedText: ' Collapse ',
     );
@@ -40,7 +39,6 @@ void main() {
     testWidgets('should ', (WidgetTester tester) async {
       final widget = buildWidget(LineModeSettings(
         trimLines: 3,
-        colorClickableText: Colors.pink,
         trimCollapsedText:
             'Just a COLLAPSED test with a really long action text with characters enough to wrap line and does not have space enough being the action text greater than the max width!',
         trimExpandedText:
@@ -56,7 +54,6 @@ void main() {
   group('with LengthModeSettings', () {
     final settings = LengthModeSettings(
       trimLength: 10,
-      colorClickableText: Colors.pink,
       trimCollapsedText: 'Expand',
       trimExpandedText: ' Collapse ',
     );
@@ -78,7 +75,6 @@ void main() {
   group('common tests', () {
     final settings = LengthModeSettings(
       trimLength: 10,
-      colorClickableText: Colors.pink,
       trimCollapsedText: 'Expand',
       trimExpandedText: ' Collapse ',
     );
