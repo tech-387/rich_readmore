@@ -1,3 +1,7 @@
+![rich_readmore workflow](https://github.com/thierryoliveira/rich_readmore/actions/workflows/rich_readmore.yml/badge.svg)
+[![codecov](https://codecov.io/gh/thierryoliveira/rich_readmore/branch/master/graph/badge.svg?token=210MCG1JFN)](https://codecov.io/gh/thierryoliveira/rich_readmore)
+![MIT License](https://img.shields.io/github/license/thierryoliveira/rich_readmore)
+
 # rich_readmore
 
 A widget that displays text with an option to show more or show less based on the provided settings.  
