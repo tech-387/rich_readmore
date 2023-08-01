@@ -83,7 +83,7 @@ void main() {
       final widget = buildWidget(settings);
       await tester.pumpWidget(widget);
 
-      final richText = tester.widget<RichText>(find.byType(RichText));
+      RichText richText = tester.widget<RichText>(find.byType(RichText));
 
       richText.text.visitChildren(
         (visitor) {
@@ -98,11 +98,31 @@ void main() {
       );
 
       await tester.pumpAndSettle();
-      final updatedRichText =
+      RichText updatedRichText =
           find.byType(RichText).evaluate().single.widget as RichText;
-      final plainText = updatedRichText.text.toPlainText();
+      String plainText = updatedRichText.text.toPlainText();
 
       expect(plainText.contains(settings.trimExpandedText), isTrue);
+      richText = tester.widget<RichText>(find.byType(RichText));
+
+      richText.text.visitChildren(
+        (visitor) {
+          if (visitor is TextSpan &&
+              visitor.text?.trim() == settings.trimExpandedText.trim()) {
+            (visitor.recognizer as TapGestureRecognizer).onTap?.call();
+
+            return false;
+          }
+          return true;
+        },
+      );
+
+      await tester.pumpAndSettle();
+      updatedRichText =
+          find.byType(RichText).evaluate().single.widget as RichText;
+      plainText = updatedRichText.text.toPlainText();
+
+      expect(plainText.contains(settings.trimCollapsedText), isTrue);
     });
   });
 }
