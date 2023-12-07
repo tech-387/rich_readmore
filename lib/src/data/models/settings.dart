@@ -2,25 +2,40 @@ import 'package:flutter/material.dart';
 import 'package:rich_readmore/src/data/models/trim_modes.dart';
 
 abstract class ReadMoreSettings {
+  /// The [TrimMode] to be used for trimming the text.
   final TrimMode trimMode;
+
+  /// The text to be displayed when the text is `expanded`.
   final String trimExpandedText;
+
+  /// The text to be displayed when the text is `collapsed`.
   final String trimCollapsedText;
+
+  /// The [TextAlign] to be used for the text.
   final TextAlign? textAlign;
+
+  /// The [TextDirection] to be used for the text.
   final TextDirection? textDirection;
+
+  /// The [Locale] to be used for the text.
   final Locale? locale;
-  final double? textScaleFactor;
+
+  /// The [TextScaler] to be used for the text.
+  final TextScaler? textScaler;
+
+  /// The semantics label to be used for accessibility purposes.
   final String? semanticsLabel;
 
-  /// TextStyle for expanded text
+  /// TextStyle for expanded text.
   final TextStyle? moreStyle;
 
-  /// TextStyle for compressed text
+  /// TextStyle for compressed text.
   final TextStyle? lessStyle;
 
-  /// Callback to be called on press to read more
+  /// Callback to be called on press to read more.
   final VoidCallback? onPressReadMore;
 
-  /// Callback to be called on press to read less
+  /// Callback to be called on press to read less.
   final VoidCallback? onPressReadLess;
 
   ReadMoreSettings({
@@ -30,7 +45,7 @@ abstract class ReadMoreSettings {
     this.textAlign,
     this.textDirection,
     this.locale,
-    this.textScaleFactor,
+    this.textScaler,
     this.semanticsLabel,
     this.moreStyle,
     this.lessStyle,
@@ -50,7 +65,7 @@ class LineModeSettings extends ReadMoreSettings {
       super.textAlign,
       super.textDirection,
       super.locale,
-      super.textScaleFactor,
+      super.textScaler,
       super.semanticsLabel,
       super.moreStyle,
       super.lessStyle,
@@ -70,7 +85,7 @@ class LengthModeSettings extends ReadMoreSettings {
       super.textAlign,
       super.textDirection,
       super.locale,
-      super.textScaleFactor,
+      super.textScaler,
       super.semanticsLabel,
       super.moreStyle,
       super.lessStyle,
