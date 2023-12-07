@@ -1,3 +1,7 @@
+## [1.1.0]
+- **BREAKING**: Replace the deprecated `textScaleFactor` with `textScaler`.
+- Improve the properties documentation.
+
 ## [1.0.6]
 - Increase test coverage to 100%
 - Integrate with codecov API to have some custom test reports
