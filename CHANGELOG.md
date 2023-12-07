@@ -1,3 +1,6 @@
+## [1.1.1]
+- Decrease min dart SDK to 3.0.0
+
 ## [1.1.0]
 - **BREAKING**: Replace the deprecated `textScaleFactor` with `textScaler`.
 - Improve the properties documentation.
