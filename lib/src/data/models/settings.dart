@@ -32,12 +32,6 @@ abstract class ReadMoreSettings {
   /// TextStyle for compressed text.
   final TextStyle? lessStyle;
 
-  /// Callback to be called on press to read more.
-  final VoidCallback? onPressReadMore;
-
-  /// Callback to be called on press to read less.
-  final VoidCallback? onPressReadLess;
-
   ReadMoreSettings({
     required this.trimMode,
     this.trimExpandedText = 'show less',
@@ -49,8 +43,6 @@ abstract class ReadMoreSettings {
     this.semanticsLabel,
     this.moreStyle,
     this.lessStyle,
-    this.onPressReadMore,
-    this.onPressReadLess,
   });
 }
 
@@ -58,38 +50,34 @@ class LineModeSettings extends ReadMoreSettings {
   final int trimLines;
 
   /// Settings for trim using line numbers
-  LineModeSettings(
-      {required this.trimLines,
-      super.trimExpandedText,
-      super.trimCollapsedText,
-      super.textAlign,
-      super.textDirection,
-      super.locale,
-      super.textScaler,
-      super.semanticsLabel,
-      super.moreStyle,
-      super.lessStyle,
-      super.onPressReadMore,
-      super.onPressReadLess})
-      : super(trimMode: TrimMode.line);
+  LineModeSettings({
+    required this.trimLines,
+    super.trimExpandedText,
+    super.trimCollapsedText,
+    super.textAlign,
+    super.textDirection,
+    super.locale,
+    super.textScaler,
+    super.semanticsLabel,
+    super.moreStyle,
+    super.lessStyle,
+  }) : super(trimMode: TrimMode.line);
 }
 
 class LengthModeSettings extends ReadMoreSettings {
   final int trimLength;
 
   /// Settings form trim using characters length
-  LengthModeSettings(
-      {required this.trimLength,
-      super.trimExpandedText,
-      super.trimCollapsedText,
-      super.textAlign,
-      super.textDirection,
-      super.locale,
-      super.textScaler,
-      super.semanticsLabel,
-      super.moreStyle,
-      super.lessStyle,
-      super.onPressReadMore,
-      super.onPressReadLess})
-      : super(trimMode: TrimMode.length);
+  LengthModeSettings({
+    required this.trimLength,
+    super.trimExpandedText,
+    super.trimCollapsedText,
+    super.textAlign,
+    super.textDirection,
+    super.locale,
+    super.textScaler,
+    super.semanticsLabel,
+    super.moreStyle,
+    super.lessStyle,
+  }) : super(trimMode: TrimMode.length);
 }

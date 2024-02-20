@@ -3,6 +3,7 @@ library rich_readmore;
 import 'package:flutter/material.dart';
 import 'package:rich_readmore/src/core/helpers/text_span_helper.dart';
 import 'package:rich_readmore/src/data/models/settings.dart';
+import 'package:rich_readmore/src/presentation/rich_readmore_controller.dart';
 
 class RichReadMoreText extends StatefulWidget {
   /// A widget that displays text with an option to show more or show less based on the provided settings.
@@ -20,19 +21,23 @@ class RichReadMoreText extends StatefulWidget {
   ///      trimLines: 3,
   ///      trimCollapsedText: 'Expand',
   ///      trimExpandedText: ' Collapse ',
-  ///      onPressReadMore: () {
-  ///       //specific method to be called on press to show more
-  ///      },
-  ///      onPressReadLess: () {
-  ///        // specific method to be called on press to show less
-  ///      },
   ///    ),
+  ///   controller: RichReadMoreController(
+  ///     onPressReadMore: () {
+  ///       //specific method to be called on press to show more
+  ///     },
+  ///     onPressReadLess: () {
+  ///       // specific method to be called on press to show less
+  ///     },
+  ///   ),
   ///  ),
   /// ```
+
   const RichReadMoreText(
     this.data, {
     Key? key,
     required this.settings,
+    this.controller,
   }) : super(key: key);
 
   /// A widget that displays text with an option to show more or show less based on the provided settings.
@@ -61,6 +66,7 @@ class RichReadMoreText extends StatefulWidget {
   RichReadMoreText.fromString({
     Key? key,
     required String text,
+    this.controller,
     TextStyle? textStyle,
     required this.settings,
   }) : data = TextSpan(text: text, style: textStyle);
@@ -74,13 +80,15 @@ class RichReadMoreText extends StatefulWidget {
   ///  The text to be displayed
   final TextSpan data;
 
+  /// The controller for expanding or collapsing your text programatically.
+  /// You can also register [onPressReadMore] and [onPressReadLess] callbacks.
+  final RichReadMoreController? controller;
+
   @override
   _RichReadMoreTextState createState() => _RichReadMoreTextState();
 }
 
 class _RichReadMoreTextState extends State<RichReadMoreText> {
-  bool _readMore = true;
-
   /// The alignment for the text
   ///
   /// Is set to `TextAlign.start` if the [settings.textAlign] is null
@@ -91,6 +99,8 @@ class _RichReadMoreTextState extends State<RichReadMoreText> {
 
   /// The helper class that contains the methods for managing the textSpans
   late final TextSpanHelper textSpanHelper;
+
+  late final RichReadMoreController controller;
 
   /// A getter for the [TextScaler] to be used for the text.
   /// If the [settings.textScaler] is null, it will use the
@@ -103,100 +113,102 @@ class _RichReadMoreTextState extends State<RichReadMoreText> {
     super.initState();
     textAlign = widget.settings.textAlign ?? TextAlign.start;
     textSpanHelper = TextSpanHelper();
+    controller = widget.controller ?? RichReadMoreController();
     actionText = textSpanHelper.updateActionText(
-        isExpanded: _readMore, onTap: _onTapLink, settings: widget.settings);
+      isExpanded: controller.isExpanded,
+      onTap: controller.onTapLink,
+      settings: widget.settings,
+    );
   }
 
-  void _onTapLink() {
-    setState(() {
-      _readMore = !_readMore;
-      if (_readMore) {
-        widget.settings.onPressReadLess?.call();
-      } else {
-        widget.settings.onPressReadMore?.call();
-      }
-    });
-  }
-
-  @override
-  void setState(VoidCallback fn) {
-    super.setState(fn);
+  void updateActionText() {
     actionText = textSpanHelper.updateActionText(
-        isExpanded: _readMore, onTap: _onTapLink, settings: widget.settings);
+      isExpanded: controller.isExpanded,
+      onTap: controller.onTapLink,
+      settings: widget.settings,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Semantics(
-      textDirection: widget.settings.textDirection,
-      label: widget.settings.semanticsLabel,
-      child: ExcludeSemantics(
-        child: LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints constraints) {
-            assert(constraints.hasBoundedWidth);
+    return ListenableBuilder(
+      listenable: controller,
+      builder: (context, child) {
+        updateActionText();
+        return Semantics(
+          textDirection: widget.settings.textDirection,
+          label: widget.settings.semanticsLabel,
+          child: ExcludeSemantics(
+            child: LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
+                assert(constraints.hasBoundedWidth);
 
-            final double maxWidth = constraints.maxWidth;
+                final double maxWidth = constraints.maxWidth;
 
-            // Layout and measure link
-            TextPainter textPainter = TextPainter(
-              text: actionText,
-              textAlign: textAlign,
-              textDirection: widget.settings.textDirection ?? TextDirection.rtl,
-              textScaler: textScaler,
-              maxLines: widget.settings is LineModeSettings
-                  ? (widget.settings as LineModeSettings).trimLines
-                  : null,
-              locale: widget.settings.locale,
-            );
-            textPainter.layout(minWidth: 0, maxWidth: maxWidth);
-            final actionTextSize = textPainter.size;
+                // Layout and measure link
+                TextPainter textPainter = TextPainter(
+                  text: actionText,
+                  textAlign: textAlign,
+                  textDirection:
+                      widget.settings.textDirection ?? TextDirection.rtl,
+                  textScaler: textScaler,
+                  maxLines: widget.settings is LineModeSettings
+                      ? (widget.settings as LineModeSettings).trimLines
+                      : null,
+                  locale: widget.settings.locale,
+                );
+                textPainter.layout(minWidth: 0, maxWidth: maxWidth);
+                final actionTextSize = textPainter.size;
 
-            // Layout and measure text
-            textPainter.text = widget.data;
-            textPainter.layout(
-                minWidth: constraints.minWidth, maxWidth: maxWidth);
-            final textSize = textPainter.size;
+                // Layout and measure text
+                textPainter.text = widget.data;
+                textPainter.layout(
+                    minWidth: constraints.minWidth, maxWidth: maxWidth);
+                final textSize = textPainter.size;
 
-            int endIndex;
+                int endIndex;
 
-            if (widget.settings is LengthModeSettings) {
-              endIndex = (widget.settings as LengthModeSettings).trimLength - 1;
-            } else if (actionTextSize.width < maxWidth) {
-              final readMoreSize = actionTextSize.width;
-              final pos = textPainter.getPositionForOffset(Offset(
-                widget.settings.textDirection == TextDirection.rtl
-                    ? readMoreSize
-                    : textSize.width - readMoreSize,
-                textSize.height,
-              ));
-              endIndex = textPainter.getOffsetBefore(pos.offset) ?? 0;
-            } else {
-              var pos = textPainter.getPositionForOffset(
-                textSize.bottomLeft(Offset.zero),
-              );
-              endIndex = pos.offset;
-            }
+                if (widget.settings is LengthModeSettings) {
+                  endIndex =
+                      (widget.settings as LengthModeSettings).trimLength - 1;
+                } else if (actionTextSize.width < maxWidth) {
+                  final readMoreSize = actionTextSize.width;
+                  final pos = textPainter.getPositionForOffset(Offset(
+                    widget.settings.textDirection == TextDirection.rtl
+                        ? readMoreSize
+                        : textSize.width - readMoreSize,
+                    textSize.height,
+                  ));
+                  endIndex = textPainter.getOffsetBefore(pos.offset) ?? 0;
+                } else {
+                  var pos = textPainter.getPositionForOffset(
+                    textSize.bottomLeft(Offset.zero),
+                  );
+                  endIndex = pos.offset;
+                }
 
-            var textSpan = textSpanHelper.getTextSpanForTrimMode(
-              data: widget.data,
-              settings: widget.settings,
-              isExpanded: _readMore,
-              actionText: actionText,
-              didExceedMaxLines: textPainter.didExceedMaxLines,
-              endIndex: endIndex,
-            );
+                var textSpan = textSpanHelper.getTextSpanForTrimMode(
+                  data: widget.data,
+                  settings: widget.settings,
+                  isExpanded: controller.isExpanded,
+                  actionText: actionText,
+                  didExceedMaxLines: textPainter.didExceedMaxLines,
+                  endIndex: endIndex,
+                );
 
-            return Text.rich(
-              textSpan,
-              textAlign: textAlign,
-              textDirection: widget.settings.textDirection,
-              softWrap: true,
-              overflow: TextOverflow.clip,
-              textScaler: textScaler,
-            );
-          },
-        ),
-      ),
+                return Text.rich(
+                  textSpan,
+                  textAlign: textAlign,
+                  textDirection: widget.settings.textDirection,
+                  softWrap: true,
+                  overflow: TextOverflow.clip,
+                  textScaler: textScaler,
+                );
+              },
+            ),
+          ),
+        );
+      },
     );
   }
 }

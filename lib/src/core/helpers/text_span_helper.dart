@@ -11,35 +11,46 @@ class TextSpanHelper {
   TextSpanHelper();
 
   /// Returns a [TextSpan] adding the [actionText] on the children
-  TextSpan buildTextSpan(
-          {required TextSpan span, required TextSpan actionText}) =>
-      TextSpan(children: [
-        span,
-        actionText,
-      ]);
+  TextSpan buildTextSpan({
+    required TextSpan span,
+    required TextSpan actionText,
+  }) =>
+      TextSpan(
+        children: [
+          span,
+          actionText,
+        ],
+      );
 
   /// Returns a treated TextSpan depending on the [TrimMode] provided.
-  TextSpan getTextSpanForTrimMode(
-      {required TextSpan data,
-      required ReadMoreSettings settings,
-      required bool isExpanded,
-      required TextSpan actionText,
-      required bool didExceedMaxLines,
-      required int endIndex}) {
+  TextSpan getTextSpanForTrimMode({
+    required TextSpan data,
+    required ReadMoreSettings settings,
+    required bool isExpanded,
+    required TextSpan actionText,
+    required bool didExceedMaxLines,
+    required int endIndex,
+  }) {
     switch (settings.trimMode) {
       case TrimMode.length:
         final LengthModeSettings lengthSettings =
             settings as LengthModeSettings;
         if (lengthSettings.trimLength < data.toPlainText().length) {
           final textSpan = isExpanded ? data.substring(0, endIndex) : data;
-          return buildTextSpan(span: textSpan, actionText: actionText);
+          return buildTextSpan(
+            span: textSpan,
+            actionText: actionText,
+          );
         } else {
           return data;
         }
       case TrimMode.line:
         if (didExceedMaxLines) {
           final textSpan = isExpanded ? data.substring(0, endIndex) : data;
-          return buildTextSpan(span: textSpan, actionText: actionText);
+          return buildTextSpan(
+            span: textSpan,
+            actionText: actionText,
+          );
         } else {
           return data;
         }
@@ -47,10 +58,11 @@ class TextSpanHelper {
   }
 
   /// Updates the [actionText] depending on the [isExpanded] value
-  TextSpan updateActionText(
-          {required ReadMoreSettings settings,
-          required bool isExpanded,
-          required VoidCallback onTap}) =>
+  TextSpan updateActionText({
+    required ReadMoreSettings settings,
+    required bool isExpanded,
+    required VoidCallback onTap,
+  }) =>
       TextSpan(
         text: ' ' +
             (isExpanded
