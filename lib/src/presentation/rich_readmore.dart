@@ -168,9 +168,13 @@ class _RichReadMoreTextState extends State<RichReadMoreText> {
 
                 int endIndex;
 
+                bool isExpandable = false;
+
                 if (widget.settings is LengthModeSettings) {
-                  endIndex =
-                      (widget.settings as LengthModeSettings).trimLength - 1;
+                  int trimLength =
+                      (widget.settings as LengthModeSettings).trimLength;
+                  endIndex = trimLength - 1;
+                  isExpandable = widget.data.toPlainText().length > trimLength;
                 } else if (actionTextSize.width < maxWidth) {
                   final readMoreSize = actionTextSize.width;
                   final pos = textPainter.getPositionForOffset(Offset(
@@ -180,6 +184,7 @@ class _RichReadMoreTextState extends State<RichReadMoreText> {
                     textSize.height,
                   ));
                   endIndex = textPainter.getOffsetBefore(pos.offset) ?? 0;
+                  isExpandable = textPainter.didExceedMaxLines;
                 } else {
                   var pos = textPainter.getPositionForOffset(
                     textSize.bottomLeft(Offset.zero),
@@ -196,13 +201,16 @@ class _RichReadMoreTextState extends State<RichReadMoreText> {
                   endIndex: endIndex,
                 );
 
-                return Text.rich(
-                  textSpan,
-                  textAlign: textAlign,
-                  textDirection: widget.settings.textDirection,
-                  softWrap: true,
-                  overflow: TextOverflow.clip,
-                  textScaler: textScaler,
+                return IgnorePointer(
+                  ignoring: !isExpandable,
+                  child: Text.rich(
+                    textSpan,
+                    textAlign: textAlign,
+                    textDirection: widget.settings.textDirection,
+                    softWrap: true,
+                    overflow: TextOverflow.clip,
+                    textScaler: textScaler,
+                  ),
                 );
               },
             ),

@@ -43,27 +43,28 @@ class _DemoAppState extends State<DemoApp> {
       text: 'Don\'t have an account? Contrary to popular belief, Lor',
       style: TextStyle(
           color: Colors.blueGrey, fontSize: 18, fontWeight: FontWeight.bold),
-      children: <TextSpan>[
-        TextSpan(
-          text: 'em Ipsum is not simply random text. ',
-          style: TextStyle(color: Colors.black, fontSize: 18),
-        ),
-        TextSpan(
-          text:
-              'It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old',
-        ),
-        TextSpan(
-          text: ' Sign up',
-          style: TextStyle(color: Colors.black, fontSize: 18),
-        ),
-        TextSpan(
-            text:
-                ' Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old'),
-        TextSpan(
-          text: ' Just another link for know what will happens',
-          style: TextStyle(color: Colors.black, fontSize: 18),
-        ),
-      ],
+      // children: <TextSpan>[
+      //   TextSpan(
+      //     text: 'em Ipsum is not simply random text. ',
+      //     style: TextStyle(color: Colors.black, fontSize: 18),
+      //   ),
+      //   TextSpan(
+      //     text:
+      //         'It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old',
+      //   ),
+      //   TextSpan(
+      //     text: ' Sign up',
+      //     style: TextStyle(color: Colors.black, fontSize: 18),
+      //   ),
+      //   TextSpan(
+      //       text:
+      //           ' Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old'),
+      //   TextSpan(
+      //     text: ' Just another link for know what will happens',
+      //     style: TextStyle(color: Colors.black, fontSize: 18),
+      //   ),
+      // ],
+
       recognizer: TapGestureRecognizer()
         ..onTap = () {
           controller.onTapLink();
@@ -101,6 +102,26 @@ class _DemoAppState extends State<DemoApp> {
                 child: Text(
                   'Length Mode',
                   style: actionTextStyle,
+                ),
+              ),
+              Padding(
+                key: const Key('showMoreLength'),
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: GestureDetector(
+                  onTap: () {
+                    controller.onTapLink();
+                  },
+                  child: RichReadMoreText(
+                    textSpan,
+                    settings: LengthModeSettings(
+                      trimLength: 10,
+                      trimCollapsedText: '...Expand',
+                      trimExpandedText: ' Collapse ',
+                      lessStyle: actionTextStyle.copyWith(fontSize: 18),
+                      moreStyle: actionTextStyle.copyWith(fontSize: 18),
+                    ),
+                    controller: controller,
+                  ),
                 ),
               ),
               Divider(
