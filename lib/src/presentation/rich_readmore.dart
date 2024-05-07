@@ -30,6 +30,7 @@ class RichReadMoreText extends StatefulWidget {
   ///       // specific method to be called on press to show less
   ///     },
   ///   ),
+  ///   enableInteractionWhenCollapsed: true, // Allows interaction even when the text is collapsed
   ///  ),
   /// ```
 
