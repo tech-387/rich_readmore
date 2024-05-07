@@ -38,6 +38,7 @@ class RichReadMoreText extends StatefulWidget {
     Key? key,
     required this.settings,
     this.controller,
+    this.enableInteractionWhenCollapsed = false,
   }) : super(key: key);
 
   /// A widget that displays text with an option to show more or show less based on the provided settings.
@@ -61,6 +62,7 @@ class RichReadMoreText extends StatefulWidget {
   ///      lessStyle: TextStyle(color: Colors.blue),
   ///      moreStyle: TextStyle(color: Colors.blue),
   ///    ),
+  ///   enableInteractionWhenCollapsed: true, // Allows interaction even when the text is collapsed
   ///  ),
   /// ```
   RichReadMoreText.fromString({
@@ -69,6 +71,7 @@ class RichReadMoreText extends StatefulWidget {
     this.controller,
     TextStyle? textStyle,
     required this.settings,
+    this.enableInteractionWhenCollapsed = false,
   }) : data = TextSpan(text: text, style: textStyle);
 
   /// The settings to control the trimming behavior.
@@ -83,6 +86,12 @@ class RichReadMoreText extends StatefulWidget {
   /// The controller for expanding or collapsing your text programatically.
   /// You can also register [onPressReadMore] and [onPressReadLess] callbacks.
   final RichReadMoreController? controller;
+
+  /// When set to true, this allows for user interaction with the text even when it is collapsed.
+  /// This is useful for maintaining engagement with elements like links embedded in the text, which
+  /// might otherwise be disabled when the text is not fully expanded. Defaults to false to maintain
+  /// traditional behavior where interaction is only possible when text is expanded.
+  final bool enableInteractionWhenCollapsed;
 
   @override
   _RichReadMoreTextState createState() => _RichReadMoreTextState();
@@ -202,7 +211,8 @@ class _RichReadMoreTextState extends State<RichReadMoreText> {
                 );
 
                 return IgnorePointer(
-                  ignoring: !isExpandable,
+                  ignoring:
+                      !widget.enableInteractionWhenCollapsed && !isExpandable,
                   child: Text.rich(
                     textSpan,
                     textAlign: textAlign,
