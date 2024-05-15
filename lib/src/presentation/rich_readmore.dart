@@ -211,6 +211,8 @@ class _RichReadMoreTextState extends State<RichReadMoreText> {
                   endIndex: endIndex,
                 );
 
+                controller.isExpandable = isExpandable;
+
                 return IgnorePointer(
                   ignoring:
                       !widget.enableInteractionWhenCollapsed && !isExpandable,

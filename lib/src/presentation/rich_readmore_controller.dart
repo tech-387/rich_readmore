@@ -9,8 +9,11 @@ class RichReadMoreController extends ChangeNotifier {
 
   bool _readMore = true;
 
+  bool _isExpandable = false;
+
   bool get isExpanded => _readMore;
   bool get isCollapsed => !_readMore;
+  bool get isExpandable => _isExpandable;
 
   RichReadMoreController({
     this.onPressReadLess,
@@ -25,5 +28,12 @@ class RichReadMoreController extends ChangeNotifier {
       onPressReadMore?.call();
     }
     notifyListeners();
+  }
+
+  set isExpandable(bool value) {
+    if (_isExpandable != value) {
+      _isExpandable = value;
+      notifyListeners();
+    }
   }
 }
