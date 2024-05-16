@@ -33,7 +33,9 @@ class RichReadMoreController extends ChangeNotifier {
   set isExpandable(bool value) {
     if (_isExpandable != value) {
       _isExpandable = value;
-      notifyListeners();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        notifyListeners();
+      });
     }
   }
 }
